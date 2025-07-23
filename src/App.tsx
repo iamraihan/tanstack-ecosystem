@@ -17,6 +17,13 @@ function App() {
 
   console.log(products, "products");
 
+  const columns = [
+    {
+      header: "Name",
+      accessorKey: "name",
+    },
+  ];
+
   const table = useReactTable({
     data: products || [],
     columns: columns,
