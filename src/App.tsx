@@ -5,8 +5,9 @@ import {
   getCoreRowModel,
   useReactTable,
   getFilteredRowModel,
+  getPaginationRowModel,
 } from "@tanstack/react-table";
-import type { RowSelectionState } from "@tanstack/react-table";
+import type { RowSelectionState, PaginationState } from "@tanstack/react-table";
 import { API_URL } from "@/constants";
 import type { Product } from "@/types";
 import { AppDataTable } from "@/helpers/ui";
@@ -20,7 +21,11 @@ const getProducts = async (): Promise<Product[]> => {
 function App() {
   // states
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-  console.log(rowSelection, "rowSelection");
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 30,
+  });
+
   const { data: products } = useQuery({
     queryKey: ["products"],
     queryFn: getProducts,
@@ -89,9 +94,12 @@ function App() {
     columns: productColumns,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     onRowSelectionChange: setRowSelection,
+    onPaginationChange: setPagination,
     state: {
       rowSelection,
+      pagination,
     },
     enableRowSelection: true,
   });
@@ -99,6 +107,54 @@ function App() {
   return (
     <div className="max-w-5xl mx-auto p-4">
       <AppDataTable<Product> table={table} />
+
+      {/* Pagination Controls */}
+      <div className="flex items-center justify-between mt-4">
+        <div className="flex items-center gap-2">
+          <button
+            className="px-3 py-1 border rounded disabled:opacity-50"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Previous
+          </button>
+          <button
+            className="px-3 py-1 border rounded disabled:opacity-50"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            Next
+          </button>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="text-sm">
+            Page {table.getState().pagination.pageIndex + 1} of{" "}
+            {table.getPageCount()}
+          </span>
+          <span className="text-sm text-gray-600">
+            Showing {table.getRowModel().rows.length} of {products?.length || 0}{" "}
+            results
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="text-sm">Rows per page:</span>
+          <select
+            value={table.getState().pagination.pageSize}
+            onChange={(e) => {
+              table.setPageSize(Number(e.target.value));
+            }}
+            className="border rounded px-2 py-1"
+          >
+            {[10, 20, 30, 40, 50].map((pageSize) => (
+              <option key={pageSize} value={pageSize}>
+                {pageSize}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
     </div>
   );
 }
