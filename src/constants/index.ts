@@ -1,3 +1,3 @@
-const API_URL = "https://dummyjson.com/products";
+const API_URL = "https://dummyjson.com";
 
 export { API_URL };

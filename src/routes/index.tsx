@@ -1,4 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  useNavigate,
+  useSearch,
+} from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -6,37 +10,57 @@ import {
   getCoreRowModel,
   useReactTable,
   getFilteredRowModel,
-  getPaginationRowModel,
 } from "@tanstack/react-table";
-import type { RowSelectionState, PaginationState } from "@tanstack/react-table";
+import type { RowSelectionState } from "@tanstack/react-table";
 import { API_URL } from "@/constants";
 import type { Product } from "@/types";
 import { AppDataTable } from "@/helpers/ui";
 
-const getProducts = async (): Promise<Product[]> => {
-  const response = await fetch(API_URL);
+const getProducts = async (
+  limit: number = 30,
+  skip: number = 0
+): Promise<{ products: Product[]; total: number }> => {
+  // Fetch all products from the API
+  const response = await fetch(
+    `${API_URL}/products?limit=${limit}&skip=${skip}`
+  );
   const data = await response.json();
-  return data.products;
+  // const allProducts = data.products;
+
+  // Apply client-side pagination
+  // const paginatedProducts = allProducts.slice(skip, skip + limit);
+
+  return {
+    products: data.products,
+    total: data.products.length,
+  };
 };
 
 export const Route = createFileRoute("/")({
   component: Index,
+  validateSearch: (search: Record<string, unknown>) => ({
+    limit: Number(search.limit) || 30,
+    skip: Number(search.skip) || 0,
+  }),
 });
 
 function Index() {
+  const navigate = useNavigate();
+  const search = useSearch({ from: "/" });
+
   // states
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-  const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 30,
+
+  // Calculate pagination from search params
+  const pageIndex = Math.floor(search.skip / search.limit);
+
+  const pageSize = search.limit;
+
+  const { data: products, isLoading } = useQuery({
+    queryKey: ["products", search.limit, search.skip],
+    queryFn: () => getProducts(search.limit, search.skip),
   });
 
-  const { data: products } = useQuery({
-    queryKey: ["products"],
-    queryFn: getProducts,
-  });
-
-  console.log(products?.length, "products");
   const columnHelper = createColumnHelper<Product>();
 
   const productColumns = [
@@ -95,19 +119,50 @@ function Index() {
   ];
 
   const table = useReactTable({
-    data: products || [],
+    data: products?.products || [],
     columns: productColumns,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     onRowSelectionChange: setRowSelection,
-    onPaginationChange: setPagination,
     state: {
       rowSelection,
-      pagination,
     },
     enableRowSelection: true,
+    manualPagination: true,
+    pageCount: products ? Math.ceil(products.total / pageSize) : 0,
   });
+
+  // Navigation functions
+  const goToPage = (newPageIndex: number) => {
+    const newSkip = newPageIndex * pageSize;
+    console.log(
+      "Navigating to page:",
+      newPageIndex,
+      "skip:",
+      newSkip,
+      "limit:",
+      pageSize
+    );
+    navigate({
+      to: "/",
+      search: {
+        limit: pageSize,
+        skip: newSkip,
+      },
+      replace: true,
+    });
+  };
+
+  const changePageSize = (newPageSize: number) => {
+    navigate({
+      to: "/",
+      search: {
+        limit: newPageSize,
+        skip: 0, // Reset to first page when changing page size
+      },
+      replace: true,
+    });
+  };
 
   return (
     <div className="max-w-5xl mx-auto p-4">
@@ -118,15 +173,18 @@ function Index() {
         <div className="flex items-center gap-2">
           <button
             className="px-3 py-1 border rounded disabled:opacity-50"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
+            onClick={() => goToPage(pageIndex - 1)}
+            // disabled={pageIndex === 0}
           >
             Previous
           </button>
           <button
             className="px-3 py-1 border rounded disabled:opacity-50"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
+            onClick={() => goToPage(pageIndex + 1)}
+            // disabled={
+            //   pageIndex >=
+            //   (products ? Math.ceil(products.total / pageSize) - 1 : 0)
+            // }
           >
             Next
           </button>
@@ -134,27 +192,28 @@ function Index() {
 
         <div className="flex items-center gap-2">
           <span className="text-sm">
-            Page {table.getState().pagination.pageIndex + 1} of{" "}
-            {table.getPageCount()}
+            Page {pageIndex + 1} of{" "}
+            {products ? Math.ceil(products.total / pageSize) : 0}
           </span>
           <span className="text-sm text-gray-600">
-            Showing {table.getRowModel().rows.length} of {products?.length || 0}{" "}
+            Showing {products?.products.length || 0} of {products?.total || 0}{" "}
             results
           </span>
+          {isLoading && (
+            <span className="text-sm text-blue-600">Loading...</span>
+          )}
         </div>
 
         <div className="flex items-center gap-2">
           <span className="text-sm">Rows per page:</span>
           <select
-            value={table.getState().pagination.pageSize}
-            onChange={(e) => {
-              table.setPageSize(Number(e.target.value));
-            }}
+            value={pageSize}
+            onChange={(e) => changePageSize(Number(e.target.value))}
             className="border rounded px-2 py-1"
           >
-            {[10, 20, 30, 40, 50].map((pageSize) => (
-              <option key={pageSize} value={pageSize}>
-                {pageSize}
+            {[10, 20, 30, 40, 50].map((size) => (
+              <option key={size} value={size}>
+                {size}
               </option>
             ))}
           </select>
