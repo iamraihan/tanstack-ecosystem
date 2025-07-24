@@ -1,11 +1,12 @@
-import type React from "react";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   createColumnHelper,
   getCoreRowModel,
   useReactTable,
+  getFilteredRowModel,
 } from "@tanstack/react-table";
+import type { RowSelectionState } from "@tanstack/react-table";
 import { API_URL } from "@/constants";
 import type { Product } from "@/types";
 import { AppDataTable } from "@/helpers/ui";
@@ -18,49 +19,36 @@ const getProducts = async (): Promise<Product[]> => {
 
 function App() {
   // states
-  const [selectedItems, setSelectedItems] = useState<
-    Array<{ [key: number]: boolean }>
-  >([]);
-  console.log(selectedItems, "selectedItems");
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  console.log(rowSelection, "rowSelection");
   const { data: products } = useQuery({
     queryKey: ["products"],
     queryFn: getProducts,
   });
 
-  const onChangeHandler = (key: number, value: boolean) => {
-    setSelectedItems((prevData) => {
-      if (value === true) {
-        // If checking, add the item (if not already present)
-        const exists = prevData.some((item) => key in item);
-        if (!exists) {
-          return [...prevData, { [key]: true }];
-        }
-        return prevData;
-      } else {
-        // If unchecking, remove the item
-        return prevData.filter((item) => !(key in item));
-      }
-    });
-  };
-
+  console.log(products?.length, "products");
   const columnHelper = createColumnHelper<Product>();
 
   const productColumns = [
     columnHelper.accessor("title", {
-      header: "Name",
+      header: ({ table }) => (
+        <div className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={table.getIsAllPageRowsSelected()}
+            onChange={table.getToggleAllPageRowsSelectedHandler()}
+            className="w-4 h-4"
+          />
+          <span>Name</span>
+        </div>
+      ),
       cell: (info) => (
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
-            name={info.row.original.id.toString()}
-            checked={
-              selectedItems.some(
-                (item) => item[info.row.original.id] === true
-              ) || false
-            }
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              onChangeHandler(info.row.original.id, e.target.checked)
-            }
+            checked={info.row.getIsSelected()}
+            onChange={info.row.getToggleSelectedHandler()}
+            className="w-4 h-4"
           />
           <img
             src={info.row.original.thumbnail}
@@ -100,6 +88,12 @@ function App() {
     data: products || [],
     columns: productColumns,
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onRowSelectionChange: setRowSelection,
+    state: {
+      rowSelection,
+    },
+    enableRowSelection: true,
   });
 
   return (
