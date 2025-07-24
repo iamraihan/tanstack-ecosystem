@@ -4,9 +4,9 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { API_URL } from "./constants";
-import type { Product } from "./types";
-import { AppDataTable } from "./helpers/ui";
+import { API_URL } from "@/constants";
+import type { Product } from "@/types";
+import { AppDataTable } from "@/helpers/ui";
 
 const getProducts = async (): Promise<Product[]> => {
   const response = await fetch(API_URL);
