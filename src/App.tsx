@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import {
   createColumnHelper,
-  flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { API_URL } from "./constants";
 import type { Product } from "./types";
+import { AppDataTable } from "./helpers/ui";
 
 const getProducts = async (): Promise<Product[]> => {
   const response = await fetch(API_URL);
@@ -58,40 +58,10 @@ function App() {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  console.log(table, "table");
+  console.log(table.getCoreRowModel(), "table");
   return (
     <div className="max-w-7xl mx-auto p-4">
-      <div className="overflow-x-auto">
-        <table className="min-w-full border-collapse table-auto">
-          <thead>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id} className="bg-gray-100">
-                {headerGroup.headers.map((header) => (
-                  <th key={header.id} className="p-3 text-left border">
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id} className="">
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="p-2 border">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <AppDataTable<Product> table={table} />
     </div>
   );
 }
