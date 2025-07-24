@@ -1,3 +1,4 @@
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -18,7 +19,11 @@ const getProducts = async (): Promise<Product[]> => {
   return data.products;
 };
 
-function App() {
+export const Route = createFileRoute("/")({
+  component: Index,
+});
+
+function Index() {
   // states
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [pagination, setPagination] = useState<PaginationState>({
@@ -158,5 +163,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
