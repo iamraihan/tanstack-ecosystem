@@ -10,7 +10,10 @@ const DataTablePagination = ({ total }: DataTablePaginationProps) => {
   const search = useSearch({ from: '/' });
   const { navigateToPage } = usePagination();
   // Current page index and page size
-  const pageIndex = search.skip / search.limit;
+  // Validate that search.skip and search.limit are numbers and limit is not zero to avoid NaN/Infinity
+  const skip = Number(search.skip) || 0;
+  const limit = Number(search.limit) || 1; // fallback to 1 to avoid division by zero
+  const pageIndex = limit > 0 ? Math.floor(skip / limit) : 0;
 
   return (
     <>
@@ -18,14 +21,14 @@ const DataTablePagination = ({ total }: DataTablePaginationProps) => {
       <div className="mt-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <button
-            className="rounded border px-3 py-1 disabled:opacity-50"
+            className="cursor-pointer rounded border px-3 py-1 disabled:cursor-not-allowed disabled:opacity-50"
             onClick={() => navigateToPage({ pageIndex: pageIndex - 1 })}
             disabled={pageIndex <= 0}
           >
             Previous
           </button>
           <button
-            className="rounded border px-3 py-1 disabled:opacity-50"
+            className="cursor-pointer rounded border px-3 py-1 disabled:cursor-not-allowed disabled:opacity-50"
             onClick={() => navigateToPage({ pageIndex: pageIndex + 1 })}
             disabled={pageIndex >= Math.ceil(total / search.limit) - 1}
           >

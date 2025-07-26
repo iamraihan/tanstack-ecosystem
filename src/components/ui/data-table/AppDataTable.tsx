@@ -7,7 +7,6 @@ interface AppDataTableProps<TData> {
 }
 
 const AppDataTable = <TData,>({ table }: AppDataTableProps<TData>) => {
-  console.log(table.getPageCount(), 'table');
   return (
     <>
       <div className="overflow-x-auto">

@@ -28,7 +28,14 @@ export const usePagination = () => {
 
     navigate({
       to: '/',
-      search: { limit: search.limit, skip: pageIndex * search.limit },
+      // Add validation to ensure limit is a valid positive number before using it
+      search: {
+        limit: Number(search.limit) > 0 ? Number(search.limit) : 10, // fallback to 10 if invalid
+        skip:
+          Number(search.limit) > 0
+            ? pageIndex * Number(search.limit)
+            : pageIndex * 10,
+      },
     });
   };
 
