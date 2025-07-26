@@ -611,7 +611,7 @@ export const api = axios.create({
 });
 
 // utils.ts - API helper functions
-export const handleApiError = error => {
+export const handleApiError = (error) => {
   /* Error handling */
 };
 export const createQueryKey = (baseKey, params) => {
@@ -837,7 +837,7 @@ export const Route = createRootRoute({
 
 // index.tsx - Home page
 export const Route = createFileRoute('/')({
-  validateSearch: search => ({
+  validateSearch: (search) => ({
     limit: Number(search.limit) || 30,
     skip: Number(search.skip) || 0,
   }),

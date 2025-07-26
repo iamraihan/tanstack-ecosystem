@@ -13,24 +13,24 @@ export const api = axios.create({
 
 // Request interceptor (optional)
 api.interceptors.request.use(
-  config => {
+  (config) => {
     // You can add auth tokens, logging, etc. here
     console.log(
       `Making ${config.method?.toUpperCase()} request to ${config.url}`
     );
     return config;
   },
-  error => {
+  (error) => {
     return Promise.reject(error);
   }
 );
 
 // Response interceptor (optional)
 api.interceptors.response.use(
-  response => {
+  (response) => {
     return response;
   },
-  error => {
+  (error) => {
     // Handle global errors here
     console.error('API Error:', error);
     return Promise.reject(error);

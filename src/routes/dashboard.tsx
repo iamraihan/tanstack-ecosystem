@@ -1,5 +1,7 @@
 import { createFileRoute, Outlet } from '@tanstack/react-router';
 
+import { DashboardDetails } from '@/components/features';
+
 export const Route = createFileRoute('/dashboard')({
   component: Dashboard,
 });
@@ -7,8 +9,8 @@ export const Route = createFileRoute('/dashboard')({
 function Dashboard() {
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
-      <div className="bg-gray-100 p-4 rounded">
+      <DashboardDetails />
+      <div className="rounded bg-gray-100 p-4">
         <p>This is the dashboard layout. Nested routes will render below:</p>
         <Outlet />
       </div>

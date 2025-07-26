@@ -38,23 +38,23 @@ const ProductsList = () => {
             type="checkbox"
             checked={table.getIsAllPageRowsSelected()}
             onChange={table.getToggleAllPageRowsSelectedHandler()}
-            className="w-4 h-4"
+            className="h-4 w-4"
           />
           <span>Name</span>
         </div>
       ),
-      cell: info => (
+      cell: (info) => (
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
             checked={info.row.getIsSelected()}
             onChange={info.row.getToggleSelectedHandler()}
-            className="w-4 h-4"
+            className="h-4 w-4"
           />
           <img
             src={info.row.original.thumbnail}
             alt={info.getValue()}
-            className="w-10 h-10 object-cover rounded"
+            className="h-10 w-10 rounded object-cover"
           />
           <span>{info.getValue()}</span>
         </div>
@@ -62,11 +62,11 @@ const ProductsList = () => {
     }),
     columnHelper.accessor('price', {
       header: 'Price',
-      cell: info => info.getValue(),
+      cell: (info) => info.getValue(),
     }),
     columnHelper.accessor('description', {
       header: 'Description',
-      cell: info =>
+      cell: (info) =>
         info.getValue().length > 100
           ? info.getValue().substring(0, 100) + '...'
           : info.getValue(),
@@ -76,7 +76,7 @@ const ProductsList = () => {
       header: 'Actions',
       cell: ({ row }) => (
         <button
-          className=" hover:underline bg-blue-500 text-white px-4 py-2 rounded-md cursor-pointer"
+          className="cursor-pointer rounded-md bg-blue-500 px-4 py-2 text-white hover:underline"
           onClick={() => alert(`Edit ID: ${row.original.id}`)}
         >
           Actions
@@ -99,7 +99,7 @@ const ProductsList = () => {
     // pageCount: products ? Math.ceil(products.total / pageSize) : 0,
   });
   return (
-    <div className="max-w-5xl mx-auto p-4">
+    <div className="mx-auto max-w-5xl p-4">
       <AppDataTable<Product> table={table} />
     </div>
   );

@@ -28,7 +28,7 @@ function generateBarrelFile(directoryPath) {
     const exportStatements = [];
     const typeExportStatements = [];
 
-    files.forEach(file => {
+    files.forEach((file) => {
       const filePath = path.join(directoryPath, file);
       const stat = fs.statSync(filePath);
 
@@ -59,7 +59,7 @@ function generateBarrelFile(directoryPath) {
             /export\s+(?:const|function|class)\s+(\w+)/g
           );
           if (namedExports) {
-            namedExports.forEach(exportStatement => {
+            namedExports.forEach((exportStatement) => {
               const match = exportStatement.match(
                 /export\s+(?:const|function|class)\s+(\w+)/
               );
@@ -76,7 +76,7 @@ function generateBarrelFile(directoryPath) {
             /export\s+(?:interface|type)\s+(\w+)/g
           );
           if (typeExports) {
-            typeExports.forEach(exportStatement => {
+            typeExports.forEach((exportStatement) => {
               const match = exportStatement.match(
                 /export\s+(?:interface|type)\s+(\w+)/
               );
@@ -117,7 +117,7 @@ function generateBarrelFilesRecursively(directoryPath) {
 
   // Recursively generate barrels for subdirectories
   const files = fs.readdirSync(directoryPath);
-  files.forEach(file => {
+  files.forEach((file) => {
     const filePath = path.join(directoryPath, file);
     const stat = fs.statSync(filePath);
 
@@ -141,7 +141,7 @@ function updateParentBarrels(changedFilePath) {
     const parentDir = path.dirname(currentDir);
 
     // Check if parent directory is in our watch list
-    const isWatchedParent = WATCH_DIRECTORIES.some(watchDir => {
+    const isWatchedParent = WATCH_DIRECTORIES.some((watchDir) => {
       const fullWatchPath = path.resolve(watchDir);
       return (
         parentDir === fullWatchPath ||
@@ -182,14 +182,14 @@ function watchDirectory(directoryPath) {
 }
 
 // Generate barrel files for all directories recursively
-WATCH_DIRECTORIES.forEach(dir => {
+WATCH_DIRECTORIES.forEach((dir) => {
   if (fs.existsSync(dir)) {
     generateBarrelFilesRecursively(dir);
   }
 });
 
 // Watch directories for changes
-WATCH_DIRECTORIES.forEach(dir => {
+WATCH_DIRECTORIES.forEach((dir) => {
   watchDirectory(dir);
 });
 

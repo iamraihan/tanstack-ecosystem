@@ -64,17 +64,17 @@ const DataTablePagination = () => {
   return (
     <>
       {/* Pagination Controls */}
-      <div className="flex items-center justify-between mt-4">
+      <div className="mt-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <button
-            className="px-3 py-1 border rounded disabled:opacity-50"
+            className="rounded border px-3 py-1 disabled:opacity-50"
             onClick={() => prevPageHandler()}
             // disabled={pageIndex === 0}
           >
             Previous
           </button>
           <button
-            className="px-3 py-1 border rounded disabled:opacity-50"
+            className="rounded border px-3 py-1 disabled:opacity-50"
             onClick={() => nextPageHandler()}
             // disabled={
             //   pageIndex >=

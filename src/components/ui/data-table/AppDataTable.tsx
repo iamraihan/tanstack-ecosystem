@@ -13,19 +13,19 @@ const AppDataTable = <TData,>({ table }: AppDataTableProps<TData>) => {
   return (
     <>
       <button
-        className="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded-md"
+        className="cursor-pointer rounded-md bg-blue-500 px-4 py-2 text-white"
         onClick={() => navigate({ to: '/' })}
       >
         back to home
       </button>
       <DataTablePagination />
       <div className="overflow-x-auto">
-        <table className="min-w-full border-collapse table-auto">
+        <table className="min-w-full table-auto border-collapse">
           <thead>
-            {table.getHeaderGroups().map(headerGroup => (
+            {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id} className="bg-gray-100">
-                {headerGroup.headers.map(header => (
-                  <th key={header.id} className="p-3 text-left border">
+                {headerGroup.headers.map((header) => (
+                  <th key={header.id} className="border p-3 text-left">
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -38,10 +38,10 @@ const AppDataTable = <TData,>({ table }: AppDataTableProps<TData>) => {
             ))}
           </thead>
           <tbody>
-            {table.getRowModel().rows.map(row => (
+            {table.getRowModel().rows.map((row) => (
               <tr key={row.id} className="">
-                {row.getVisibleCells().map(cell => (
-                  <td key={cell.id} className="p-2 border">
+                {row.getVisibleCells().map((cell) => (
+                  <td key={cell.id} className="border p-2">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}

@@ -50,11 +50,11 @@ function ErrorFallback({
   resetErrorBoundary: () => void;
 }) {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-6">
-        <div className="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full">
+    <div className="flex min-h-screen items-center justify-center bg-gray-50">
+      <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
           <svg
-            className="w-6 h-6 text-red-600"
+            className="h-6 w-6 text-red-600"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -67,16 +67,16 @@ function ErrorFallback({
             />
           </svg>
         </div>
-        <h2 className="mt-4 text-lg font-medium text-gray-900 text-center">
+        <h2 className="mt-4 text-center text-lg font-medium text-gray-900">
           Something went wrong
         </h2>
-        <p className="mt-2 text-sm text-gray-500 text-center">
+        <p className="mt-2 text-center text-sm text-gray-500">
           {error.message || 'An unexpected error occurred'}
         </p>
         <div className="mt-6">
           <button
             onClick={resetErrorBoundary}
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            className="flex w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
           >
             Try again
           </button>

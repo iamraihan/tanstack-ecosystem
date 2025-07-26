@@ -12,7 +12,7 @@ export const Route = createFileRoute('/')({
 
 export function Index() {
   return (
-    <div className="max-w-5xl mx-auto p-4">
+    <div className="mx-auto max-w-5xl p-4">
       <ProductsList />
     </div>
   );

@@ -3,17 +3,17 @@ import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import type { Product } from '@/types';
 
-export interface GetProductsParams {
+interface GetProductsParams {
   limit?: number;
   skip?: number;
 }
 
-export interface ProductsResponse {
+interface ProductsResponse {
   products: Product[];
   total: number;
 }
 
-export const productsService = {
+const productsService = {
   // Get products with pagination
   getProducts: async (
     params: GetProductsParams = {}
