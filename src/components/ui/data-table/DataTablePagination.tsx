@@ -34,8 +34,8 @@ const DataTablePagination = <TData,>({
             className="cursor-pointer rounded border px-3 py-1 disabled:cursor-not-allowed disabled:opacity-50"
             onClick={() => navigateToPage({ pageIndex: pageIndex + 1 })}
             disabled={
-              pageIndex >=
-              Math.ceil(table.getPageCount() || 0 / search.limit) - 1
+              pageIndex + 1 >=
+              Math.ceil(table.getPageCount() / Number(search.limit))
             }
           >
             Next
