@@ -1,12 +1,15 @@
 import { useSearch } from '@tanstack/react-router';
+import type { useReactTable } from '@tanstack/react-table';
 
 import { usePagination } from '@/components/hooks';
 
-interface DataTablePaginationProps {
-  total: number;
+interface DataTablePaginationProps<TData> {
+  table: ReturnType<typeof useReactTable<TData>>;
 }
 
-const DataTablePagination = ({ total }: DataTablePaginationProps) => {
+const DataTablePagination = <TData,>({
+  table,
+}: DataTablePaginationProps<TData>) => {
   const search = useSearch({ from: '/' });
   const { navigateToPage } = usePagination();
   // Current page index and page size
@@ -30,31 +33,32 @@ const DataTablePagination = ({ total }: DataTablePaginationProps) => {
           <button
             className="cursor-pointer rounded border px-3 py-1 disabled:cursor-not-allowed disabled:opacity-50"
             onClick={() => navigateToPage({ pageIndex: pageIndex + 1 })}
-            disabled={pageIndex >= Math.ceil(total / search.limit) - 1}
+            disabled={
+              pageIndex >=
+              Math.ceil(table.getPageCount() || 0 / search.limit) - 1
+            }
           >
             Next
           </button>
         </div>
 
-        {/* <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2">
           <span className="text-sm">
-            Page {pageIndex + 1} of{" "}
-            {data ? Math.ceil(data.total / pageSize) : 0}
+            Page {pageIndex + 1} of
+            {table.getRowCount() || 0}
           </span>
           <span className="text-sm text-gray-600">
-            Showing {data?.items.length || 0} of {data?.total || 0} results
+            Showing {table.getRowModel().rows.length} of{' '}
+            {table.getRowCount() || 0} results
           </span>
-          {isLoading && (
-            <span className="text-sm text-blue-600">Loading...</span>
-          )}
         </div>
 
-        <div className="flex items-center gap-2">
+        {/* <div className="flex items-center gap-2">
           <span className="text-sm">Rows per page:</span>
           <select
             value={pageSize}
             onChange={(e) => changePageSize(Number(e.target.value))}
-            className="border rounded px-2 py-1"
+            className="rounded border px-2 py-1"
           >
             {[10, 20, 30, 40, 50].map((size) => (
               <option key={size} value={size}>

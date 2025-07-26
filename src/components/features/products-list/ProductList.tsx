@@ -18,7 +18,7 @@ const ProductsList = () => {
   // get the search params
   const search = useSearch({ from: '/' });
 
-  const { data: { products, total } = {} } = useGetProducts({
+  const { data: { products, total } = {}, isLoading } = useGetProducts({
     limit: Number(search.limit) || 30,
     skip: Number(search.skip) || 0,
   });
@@ -95,7 +95,7 @@ const ProductsList = () => {
   });
   return (
     <div className="mx-auto max-w-5xl p-4">
-      <AppDataTable<Product> table={table} />
+      <AppDataTable<Product> table={table} isLoading={isLoading} />
     </div>
   );
 };

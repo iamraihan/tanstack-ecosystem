@@ -4,9 +4,15 @@ import DataTablePagination from '@/components/ui/data-table/DataTablePagination'
 
 interface AppDataTableProps<TData> {
   table: ReturnType<typeof useReactTable<TData>>;
+  isLoading: boolean;
 }
 
-const AppDataTable = <TData,>({ table }: AppDataTableProps<TData>) => {
+const AppDataTable = <TData,>({
+  table,
+  isLoading,
+}: AppDataTableProps<TData>) => {
+  console.log(isLoading, 'isLoading');
+
   return (
     <>
       <div className="overflow-x-auto">
@@ -40,7 +46,7 @@ const AppDataTable = <TData,>({ table }: AppDataTableProps<TData>) => {
           </tbody>
         </table>
       </div>
-      <DataTablePagination total={table.getPageCount() || 0} />
+      <DataTablePagination table={table} />
     </>
   );
 };
