@@ -915,11 +915,15 @@ User Interaction → Component → Custom Hook → Service → API → Response 
    pnpm install
    ```
 
-2. **Install VS Code Extension** (for auto barrel exports):
+2. **Start development with auto-barrel** (recommended):
 
-   Install the "Auto Barrel" extension: `steoates.auto-barrel`
+   ```bash
+   pnpm dev:watch
+   ```
 
-3. **Start development server**:
+   **This starts both the dev server AND auto-barrel system!** 🚀
+
+3. **Or start without auto-barrel**:
 
    ```bash
    pnpm dev
@@ -930,27 +934,91 @@ User Interaction → Component → Custom Hook → Service → API → Response 
    pnpm build
    ```
 
+**💡 Pro Tip**: Use `pnpm dev:watch` for the best development experience - barrel files are automatically generated and updated as you work!
+
 ## 🔧 **Auto Barrel Exports**
 
-This project is configured to automatically generate barrel export files (`index.ts`) when you create new components:
+This project includes **automatic barrel file generation** that creates `index.ts` files automatically when you create new folders and files. **No manual work required!**
+
+### **🚀 Quick Start - Just Run:**
+
+```bash
+pnpm dev:watch
+```
+
+This command starts both the development server AND the auto-barrel system. Now you can:
+
+- ✅ Create new files → barrel files auto-generated
+- ✅ Delete files → barrel files auto-updated
+- ✅ Clean imports everywhere automatically
 
 ### **How it works:**
 
-- When you create a new component file (`.tsx` or `.ts`), the Auto Barrel extension automatically generates/updates the `index.ts` file in that folder
-- This allows you to import components like: `import { Button } from '@/components/ui'` instead of `import { Button } from '@/components/ui/button/Button'`
+- **🔄 Fully Automatic**: Creates `index.ts` files automatically when you create new components, services, hooks, etc.
+- **📁 Recursive**: Generates barrels for all subdirectories
+- **🧠 Smart**: Detects both default and named exports
+- **⚡ Real-time**: Watches for file changes and updates barrels instantly
+- **🔄 Parent Updates**: Automatically updates parent directory barrel files when files are created/removed
 
-### **VS Code Extension Setup:**
+### **Usage Options:**
 
-1. Install "Auto Barrel" extension: `steoates.auto-barrel`
-2. The extension is already configured in `.vscode/settings.json`
-3. Barrel files are automatically generated when you create new files/folders
-4. No manual intervention required!
+```bash
+# Recommended: Start dev server with auto-barrel
+pnpm dev:watch
+
+# Alternative: Run auto-barrel manually (if needed)
+pnpm auto-barrel
+```
+
+### **What gets generated:**
+
+When you create a file like `src/components/ui/button/Button.tsx`:
+
+```typescript
+// src/components/ui/button/index.ts (auto-generated)
+export { default as Button } from "./Button";
+export { Button } from "./Button";
+
+// src/components/ui/index.ts (auto-updated)
+export * from "./button";
+export * from "./data-table";
+export * from "./input";
+// ... other exports
+```
+
+### **Supported directories:**
+
+- `src/components/ui/`
+- `src/components/features/`
+- `src/services/`
+- `src/hooks/`
+- `src/utils/`
+- `src/lib/`
+- `src/types/`
+
+### **🎯 Automatic Workflow (Just Run `pnpm dev:watch`):**
+
+1. **Create a file**: `src/components/ui/modal/Modal.tsx`
+2. **Auto-generates**: `src/components/ui/modal/index.ts`
+3. **Auto-updates**: `src/components/ui/index.ts` to include `export * from './modal';`
+4. **Clean imports**: `import { Modal } from '@/components/ui'`
+
+**That's it! No manual work needed.** 🎉
+
+### **File Removal:**
+
+When you delete a file, the system automatically:
+
+- Removes exports from the directory's `index.ts`
+- Updates parent directory's `index.ts` to remove the export
+- Keeps imports clean and up-to-date
 
 ### **Example:**
 
-When you create `src/components/ui/button/Button.tsx`, the extension automatically creates/updates `src/components/ui/button/index.ts` with:
+When you create `src/components/ui/button/Button.tsx`, the script automatically creates/updates `src/components/ui/button/index.ts` with:
 
 ```typescript
+export { default as Button } from "./Button";
 export { Button } from "./Button";
 ```
 

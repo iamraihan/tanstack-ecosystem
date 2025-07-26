@@ -1,2 +1,3 @@
-export { AppDataTable } from "@/components/ui/data-table";
-export { PrimaryButton, SecondaryButton } from "@/components/ui/button";
+export * from './button';
+export * from './data-table';
+export * from './input';
