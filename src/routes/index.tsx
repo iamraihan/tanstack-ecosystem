@@ -1,7 +1,8 @@
-import ProductsList from "@/components/features/products";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute("/")({
+import ProductsList from '@/components/features/products';
+
+export const Route = createFileRoute('/')({
   validateSearch: (search: Record<string, unknown>) => ({
     limit: Number(search.limit) || 30,
     skip: Number(search.skip) || 0,

@@ -1,26 +1,26 @@
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Directories to watch for barrel generation
 const WATCH_DIRECTORIES = [
-  "src/components/ui",
-  "src/components/features",
-  "src/services",
-  "src/hooks",
-  "src/utils",
-  "src/lib",
-  "src/types",
+  'src/components/ui',
+  'src/components/features',
+  'src/services',
+  'src/hooks',
+  'src/utils',
+  'src/lib',
+  'src/types',
 ];
 
 // File extensions to include
-const INCLUDED_EXTENSIONS = [".ts", ".tsx"];
+const INCLUDED_EXTENSIONS = ['.ts', '.tsx'];
 
 // Files to exclude
-const EXCLUDED_FILES = ["index.ts", "index.tsx"];
+const EXCLUDED_FILES = ['index.ts', 'index.tsx'];
 
 function generateBarrelFile(directoryPath) {
   try {
@@ -28,13 +28,13 @@ function generateBarrelFile(directoryPath) {
     const exportStatements = [];
     const typeExportStatements = [];
 
-    files.forEach((file) => {
+    files.forEach(file => {
       const filePath = path.join(directoryPath, file);
       const stat = fs.statSync(filePath);
 
       if (stat.isDirectory()) {
         // Check if directory has an index file
-        const indexPath = path.join(filePath, "index.ts");
+        const indexPath = path.join(filePath, 'index.ts');
         if (fs.existsSync(indexPath)) {
           exportStatements.push(`export * from './${file}';`);
         }
@@ -47,8 +47,8 @@ function generateBarrelFile(directoryPath) {
           !EXCLUDED_FILES.includes(file)
         ) {
           // Check if file has default export
-          const content = fs.readFileSync(filePath, "utf8");
-          if (content.includes("export default")) {
+          const content = fs.readFileSync(filePath, 'utf8');
+          if (content.includes('export default')) {
             exportStatements.push(
               `export { default as ${name} } from './${name}';`
             );
@@ -59,7 +59,7 @@ function generateBarrelFile(directoryPath) {
             /export\s+(?:const|function|class)\s+(\w+)/g
           );
           if (namedExports) {
-            namedExports.forEach((exportStatement) => {
+            namedExports.forEach(exportStatement => {
               const match = exportStatement.match(
                 /export\s+(?:const|function|class)\s+(\w+)/
               );
@@ -76,7 +76,7 @@ function generateBarrelFile(directoryPath) {
             /export\s+(?:interface|type)\s+(\w+)/g
           );
           if (typeExports) {
-            typeExports.forEach((exportStatement) => {
+            typeExports.forEach(exportStatement => {
               const match = exportStatement.match(
                 /export\s+(?:interface|type)\s+(\w+)/
               );
@@ -94,8 +94,8 @@ function generateBarrelFile(directoryPath) {
     const allExports = [...typeExportStatements, ...exportStatements];
 
     if (allExports.length > 0) {
-      const barrelContent = allExports.join("\n") + "\n";
-      const indexPath = path.join(directoryPath, "index.ts");
+      const barrelContent = allExports.join('\n') + '\n';
+      const indexPath = path.join(directoryPath, 'index.ts');
       fs.writeFileSync(indexPath, barrelContent);
       console.log(`✅ Generated barrel file: ${indexPath}`);
     }
@@ -117,7 +117,7 @@ function generateBarrelFilesRecursively(directoryPath) {
 
   // Recursively generate barrels for subdirectories
   const files = fs.readdirSync(directoryPath);
-  files.forEach((file) => {
+  files.forEach(file => {
     const filePath = path.join(directoryPath, file);
     const stat = fs.statSync(filePath);
 
@@ -141,7 +141,7 @@ function updateParentBarrels(changedFilePath) {
     const parentDir = path.dirname(currentDir);
 
     // Check if parent directory is in our watch list
-    const isWatchedParent = WATCH_DIRECTORIES.some((watchDir) => {
+    const isWatchedParent = WATCH_DIRECTORIES.some(watchDir => {
       const fullWatchPath = path.resolve(watchDir);
       return (
         parentDir === fullWatchPath ||
@@ -166,7 +166,7 @@ function watchDirectory(directoryPath) {
   console.log(`👀 Watching directory: ${directoryPath}`);
 
   fs.watch(directoryPath, { recursive: true }, (eventType, filename) => {
-    if (filename && !filename.includes("index.ts")) {
+    if (filename && !filename.includes('index.ts')) {
       console.log(
         `📁 Detected change in ${directoryPath}: ${eventType} - ${filename}`
       );
@@ -182,15 +182,15 @@ function watchDirectory(directoryPath) {
 }
 
 // Generate barrel files for all directories recursively
-WATCH_DIRECTORIES.forEach((dir) => {
+WATCH_DIRECTORIES.forEach(dir => {
   if (fs.existsSync(dir)) {
     generateBarrelFilesRecursively(dir);
   }
 });
 
 // Watch directories for changes
-WATCH_DIRECTORIES.forEach((dir) => {
+WATCH_DIRECTORIES.forEach(dir => {
   watchDirectory(dir);
 });
 
-console.log("🚀 Auto Barrel is running... Press Ctrl+C to stop");
+console.log('🚀 Auto Barrel is running... Press Ctrl+C to stop');

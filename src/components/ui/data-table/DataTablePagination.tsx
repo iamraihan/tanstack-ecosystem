@@ -1,4 +1,4 @@
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate } from '@tanstack/react-router';
 
 // interface DataTablePaginationProps<T> {
 //   data: { items: T[]; total: number } | undefined;
@@ -52,14 +52,14 @@ const DataTablePagination = () => {
   const navigate = useNavigate();
 
   const nextPageHandler = () => {
-    console.log("nextPageHandler");
+    console.log('nextPageHandler');
     navigate({
-      to: "/",
+      to: '/',
       search: { limit: 30, skip: 0 },
     });
   };
   const prevPageHandler = () => {
-    console.log("prevPageHandler");
+    console.log('prevPageHandler');
   };
   return (
     <>

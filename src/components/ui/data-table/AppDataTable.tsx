@@ -1,6 +1,7 @@
-import { flexRender, useReactTable } from "@tanstack/react-table";
-import DataTablePagination from "@/components/ui/data-table/DataTablePagination";
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate } from '@tanstack/react-router';
+import { flexRender, useReactTable } from '@tanstack/react-table';
+
+import DataTablePagination from '@/components/ui/data-table/DataTablePagination';
 
 interface AppDataTableProps<TData> {
   table: ReturnType<typeof useReactTable<TData>>;
@@ -13,7 +14,7 @@ const AppDataTable = <TData,>({ table }: AppDataTableProps<TData>) => {
     <>
       <button
         className="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded-md"
-        onClick={() => navigate({ to: "/" })}
+        onClick={() => navigate({ to: '/' })}
       >
         back to home
       </button>
@@ -21,9 +22,9 @@ const AppDataTable = <TData,>({ table }: AppDataTableProps<TData>) => {
       <div className="overflow-x-auto">
         <table className="min-w-full border-collapse table-auto">
           <thead>
-            {table.getHeaderGroups().map((headerGroup) => (
+            {table.getHeaderGroups().map(headerGroup => (
               <tr key={headerGroup.id} className="bg-gray-100">
-                {headerGroup.headers.map((header) => (
+                {headerGroup.headers.map(header => (
                   <th key={header.id} className="p-3 text-left border">
                     {header.isPlaceholder
                       ? null
@@ -37,9 +38,9 @@ const AppDataTable = <TData,>({ table }: AppDataTableProps<TData>) => {
             ))}
           </thead>
           <tbody>
-            {table.getRowModel().rows.map((row) => (
+            {table.getRowModel().rows.map(row => (
               <tr key={row.id} className="">
-                {row.getVisibleCells().map((cell) => (
+                {row.getVisibleCells().map(cell => (
                   <td key={cell.id} className="p-2 border">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>

@@ -1,20 +1,22 @@
-import type { Product } from "@/types";
-import { useState } from "react";
+import { useState } from 'react';
+
+import { useSearch } from '@tanstack/react-router';
 import {
   createColumnHelper,
   getCoreRowModel,
   getFilteredRowModel,
   useReactTable,
-} from "@tanstack/react-table";
-import { useSearch } from "@tanstack/react-router";
-import { useGetProducts } from "@/services";
-import { AppDataTable } from "@/components/ui";
+} from '@tanstack/react-table';
+
+import { AppDataTable } from '@/components/ui';
+import { useGetProducts } from '@/services';
+import type { Product } from '@/types';
 
 const ProductsList = () => {
   const [rowSelection, setRowSelection] = useState({});
 
   // get the search params
-  const search = useSearch({ from: "/" });
+  const search = useSearch({ from: '/' });
 
   const { data } = useGetProducts({
     limit: Number(search.limit) || 30,
@@ -24,12 +26,12 @@ const ProductsList = () => {
   const products = data?.products || [];
   const total = data?.total || 0;
 
-  console.log(total, "total");
+  console.log(total, 'total');
 
   const columnHelper = createColumnHelper<Product>();
 
   const productColumns = [
-    columnHelper.accessor("title", {
+    columnHelper.accessor('title', {
       header: ({ table }) => (
         <div className="flex items-center gap-2">
           <input
@@ -41,7 +43,7 @@ const ProductsList = () => {
           <span>Name</span>
         </div>
       ),
-      cell: (info) => (
+      cell: info => (
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
@@ -58,20 +60,20 @@ const ProductsList = () => {
         </div>
       ),
     }),
-    columnHelper.accessor("price", {
-      header: "Price",
-      cell: (info) => info.getValue(),
+    columnHelper.accessor('price', {
+      header: 'Price',
+      cell: info => info.getValue(),
     }),
-    columnHelper.accessor("description", {
-      header: "Description",
-      cell: (info) =>
+    columnHelper.accessor('description', {
+      header: 'Description',
+      cell: info =>
         info.getValue().length > 100
-          ? info.getValue().substring(0, 100) + "..."
+          ? info.getValue().substring(0, 100) + '...'
           : info.getValue(),
     }),
     columnHelper.display({
-      id: "actions",
-      header: "Actions",
+      id: 'actions',
+      header: 'Actions',
       cell: ({ row }) => (
         <button
           className=" hover:underline bg-blue-500 text-white px-4 py-2 rounded-md cursor-pointer"

@@ -1,6 +1,7 @@
-import { api } from "@/lib/api";
-import type { Product } from "@/types";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
+
+import { api } from '@/lib/api';
+import type { Product } from '@/types';
 
 export interface GetProductsParams {
   limit?: number;
@@ -19,7 +20,7 @@ export const productsService = {
   ): Promise<ProductsResponse> => {
     const { limit = 30, skip = 0 } = params;
 
-    const response = await api.get<ProductsResponse>("/products", {
+    const response = await api.get<ProductsResponse>('/products', {
       params: { limit, skip },
     });
 
@@ -42,7 +43,7 @@ export const productsService = {
   ): Promise<ProductsResponse> => {
     const { limit = 30, skip = 0 } = params;
 
-    const response = await api.get<ProductsResponse>("/products/search", {
+    const response = await api.get<ProductsResponse>('/products/search', {
       params: { q: query, limit, skip },
     });
 
@@ -58,7 +59,7 @@ export const useGetProducts = (params: GetProductsParams = {}) => {
   const { limit = 30, skip = 0 } = params;
 
   return useQuery({
-    queryKey: ["products", { limit, skip }],
+    queryKey: ['products', { limit, skip }],
     queryFn: () => productsService.getProducts({ limit, skip }),
   });
 };
@@ -66,7 +67,7 @@ export const useGetProducts = (params: GetProductsParams = {}) => {
 // Custom hook for single product
 export const useGetProduct = (id: number) => {
   return useQuery({
-    queryKey: ["product", id],
+    queryKey: ['product', id],
     queryFn: () => productsService.getProduct(id),
     enabled: !!id,
   });
@@ -80,7 +81,7 @@ export const useSearchProducts = (
   const { limit = 30, skip = 0 } = params;
 
   return useQuery({
-    queryKey: ["products", "search", query, { limit, skip }],
+    queryKey: ['products', 'search', query, { limit, skip }],
     queryFn: () => productsService.searchProducts(query, { limit, skip }),
     enabled: !!query,
   });

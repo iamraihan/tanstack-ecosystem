@@ -554,7 +554,7 @@ features/
 
 ```typescript
 // useLocalStorage.ts - Persist user preferences
-const [theme, setTheme] = useLocalStorage("theme", "light");
+const [theme, setTheme] = useLocalStorage('theme', 'light');
 
 // useDebounce.ts - Debounce search input
 const debouncedSearch = useDebounce(searchTerm, 300);
@@ -607,11 +607,11 @@ export const useCreateProduct = () => useMutation({...});
 export const api = axios.create({
   baseURL: API_URL,
   timeout: 10000,
-  headers: { "Content-Type": "application/json" },
+  headers: { 'Content-Type': 'application/json' },
 });
 
 // utils.ts - API helper functions
-export const handleApiError = (error) => {
+export const handleApiError = error => {
   /* Error handling */
 };
 export const createQueryKey = (baseKey, params) => {
@@ -662,23 +662,23 @@ export interface ApiResponse<T> {
 
 ```typescript
 // format.ts - Data formatting utilities
-export const formatCurrency = (amount: number, currency = "USD"): string => {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
+export const formatCurrency = (amount: number, currency = 'USD'): string => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
     currency,
   }).format(amount);
 };
 
 export const formatDate = (date: Date | string): string => {
-  return new Intl.DateTimeFormat("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
   }).format(new Date(date));
 };
 
 export const formatPhoneNumber = (phone: string): string => {
-  const cleaned = phone.replace(/\D/g, "");
+  const cleaned = phone.replace(/\D/g, '');
   const match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/);
   if (match) {
     return `(${match[1]}) ${match[2]}-${match[3]}`;
@@ -688,7 +688,7 @@ export const formatPhoneNumber = (phone: string): string => {
 
 export const truncateText = (text: string, maxLength: number): string => {
   if (text.length <= maxLength) return text;
-  return text.slice(0, maxLength) + "...";
+  return text.slice(0, maxLength) + '...';
 };
 
 // validation.ts - Data validation helpers
@@ -712,7 +712,7 @@ export const isValidPhoneNumber = (phone: string): boolean => {
 };
 
 export const validateRequired = (value: any): boolean => {
-  return value !== null && value !== undefined && value !== "";
+  return value !== null && value !== undefined && value !== '';
 };
 
 // constants.ts - Application constants
@@ -720,25 +720,25 @@ export const PAGINATION_SIZES = [10, 20, 30, 50, 100] as const;
 export const DEFAULT_PAGE_SIZE = 30;
 
 export const API_ENDPOINTS = {
-  PRODUCTS: "/products",
-  USERS: "/users",
-  AUTH: "/auth",
-  UPLOAD: "/upload",
+  PRODUCTS: '/products',
+  USERS: '/users',
+  AUTH: '/auth',
+  UPLOAD: '/upload',
 } as const;
 
 export const ERROR_MESSAGES = {
-  REQUIRED_FIELD: "This field is required",
-  INVALID_EMAIL: "Please enter a valid email address",
+  REQUIRED_FIELD: 'This field is required',
+  INVALID_EMAIL: 'Please enter a valid email address',
   WEAK_PASSWORD:
-    "Password must be at least 8 characters with uppercase, lowercase, and number",
-  INVALID_PHONE: "Please enter a valid phone number",
+    'Password must be at least 8 characters with uppercase, lowercase, and number',
+  INVALID_PHONE: 'Please enter a valid phone number',
 } as const;
 
 // Helper function usage examples
 export const cn = (
   ...classes: (string | undefined | null | false)[]
 ): string => {
-  return classes.filter(Boolean).join(" ");
+  return classes.filter(Boolean).join(' ');
 };
 
 export const generateId = (): string => {
@@ -771,14 +771,14 @@ export const debounce = <T extends (...args: any[]) => any>(
 
 ```typescript
 // api.ts - API constants
-export const API_URL = "https://api.example.com";
+export const API_URL = 'https://api.example.com';
 export const API_TIMEOUT = 10000;
 
 // routes.ts - Route constants
 export const ROUTES = {
-  HOME: "/",
-  PRODUCTS: "/products",
-  USERS: "/users",
+  HOME: '/',
+  PRODUCTS: '/products',
+  USERS: '/users',
 };
 ```
 
@@ -836,8 +836,8 @@ export const Route = createRootRoute({
 });
 
 // index.tsx - Home page
-export const Route = createFileRoute("/")({
-  validateSearch: (search) => ({
+export const Route = createFileRoute('/')({
+  validateSearch: search => ({
     limit: Number(search.limit) || 30,
     skip: Number(search.skip) || 0,
   }),
@@ -976,13 +976,13 @@ When you create a file like `src/components/ui/button/Button.tsx`:
 
 ```typescript
 // src/components/ui/button/index.ts (auto-generated)
-export { default as Button } from "./Button";
-export { Button } from "./Button";
+export { default as Button } from './Button';
+export { Button } from './Button';
 
 // src/components/ui/index.ts (auto-updated)
-export * from "./button";
-export * from "./data-table";
-export * from "./input";
+export * from './button';
+export * from './data-table';
+export * from './input';
 // ... other exports
 ```
 
@@ -1018,8 +1018,8 @@ When you delete a file, the system automatically:
 When you create `src/components/ui/button/Button.tsx`, the script automatically creates/updates `src/components/ui/button/index.ts` with:
 
 ```typescript
-export { default as Button } from "./Button";
-export { Button } from "./Button";
+export { default as Button } from './Button';
+export { Button } from './Button';
 ```
 
 This allows clean imports: `import { Button } from '@/components/ui'`
@@ -1039,8 +1039,51 @@ This allows clean imports: `import { Button } from '@/components/ui'`
 
 - **vite.config.ts**: Vite configuration
 - **tsconfig.json**: TypeScript configuration
-- **eslint.config.js**: ESLint configuration
+- **eslint.config.js**: ESLint configuration with import organization
+- **.prettierrc**: Prettier configuration for code formatting
 - **package.json**: Dependencies and scripts
+
+## 📝 **Code Quality & Import Organization**
+
+This project includes automatic import organization and code formatting:
+
+### **Import Order (ESLint):**
+
+Imports are automatically organized in this order:
+
+1. **React** (first)
+2. **React-related** packages (react-\*)
+3. **TanStack** packages (@tanstack/\*)
+4. **Internal** modules (@/\*)
+5. **Relative** imports (./\*)
+
+### **Available Scripts:**
+
+```bash
+# Lint and fix import organization
+pnpm lint:fix
+
+# Format code with Prettier
+pnpm format
+
+# Check formatting without changes
+pnpm format:check
+```
+
+### **Example Import Organization:**
+
+```typescript
+import { useState } from 'react';
+
+import { useSearch } from '@tanstack/react-router';
+import { useQuery } from '@tanstack/react-query';
+
+import { Button } from '@/components/ui';
+import { useGetProducts } from '@/services';
+import type { Product } from '@/types';
+
+import './styles.css';
+```
 
 This structure ensures a scalable, maintainable, and type-safe React application following modern best practices!
 
@@ -1184,10 +1227,10 @@ export const UserForm = () => {
 
 ```typescript
 // src/hooks/useSearch.ts
-import { useState, useEffect } from "react";
-import { debounce } from "@/utils";
+import { useState, useEffect } from 'react';
+import { debounce } from '@/utils';
 
-export const useSearch = (initialValue = "") => {
+export const useSearch = (initialValue = '') => {
   const [searchTerm, setSearchTerm] = useState(initialValue);
   const [debouncedSearch, setDebouncedSearch] = useState(initialValue);
 
@@ -1211,9 +1254,9 @@ export const useSearch = (initialValue = "") => {
 
 ```typescript
 // src/services/products.ts
-import { api } from "@/lib/api";
-import { handleApiError, createQueryKey } from "@/lib/utils";
-import { API_ENDPOINTS } from "@/utils";
+import { api } from '@/lib/api';
+import { handleApiError, createQueryKey } from '@/lib/utils';
+import { API_ENDPOINTS } from '@/utils';
 
 export const productsService = {
   getProducts: async (params: GetProductsParams) => {
@@ -1237,7 +1280,7 @@ export const productsService = {
 
 export const useGetProducts = (params: GetProductsParams) => {
   return useQuery({
-    queryKey: createQueryKey("products", params),
+    queryKey: createQueryKey('products', params),
     queryFn: () => productsService.getProducts(params),
   });
 };
@@ -1249,22 +1292,22 @@ export const useGetProducts = (params: GetProductsParams) => {
 
 ```typescript
 // UI Components
-import { Button, Input, AppDataTable } from "@/components/ui";
+import { Button, Input, AppDataTable } from '@/components/ui';
 
 // Custom Hooks
-import { useLocalStorage, useDebounce, usePagination } from "@/hooks";
+import { useLocalStorage, useDebounce, usePagination } from '@/hooks';
 
 // Services
-import { useGetProducts, productsService } from "@/services";
+import { useGetProducts, productsService } from '@/services';
 
 // Utilities
-import { formatCurrency, isValidEmail, cn } from "@/utils";
+import { formatCurrency, isValidEmail, cn } from '@/utils';
 
 // Types
-import type { Product, User } from "@/types";
+import type { Product, User } from '@/types';
 
 // Constants
-import { API_ENDPOINTS, ERROR_MESSAGES } from "@/utils";
+import { API_ENDPOINTS, ERROR_MESSAGES } from '@/utils';
 ```
 
 ### **File Naming Conventions**
@@ -1280,14 +1323,14 @@ import { API_ENDPOINTS, ERROR_MESSAGES } from "@/utils";
 
 ```typescript
 // Always use named exports
-export { Button } from "./Button";
-export type { ButtonProps } from "./Button";
+export { Button } from './Button';
+export type { ButtonProps } from './Button';
 
 // Index files for clean imports
 // src/components/ui/index.ts
-export { Button } from "./button/Button";
-export { Input } from "./input/Input";
-export { AppDataTable } from "./data-table/AppDataTable";
+export { Button } from './button/Button';
+export { Input } from './input/Input';
+export { AppDataTable } from './data-table/AppDataTable';
 ```
 
 This comprehensive structure provides a solid foundation for any React project, with clear patterns for helpers, UI components, and framework adaptations!
