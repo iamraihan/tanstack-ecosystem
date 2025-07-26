@@ -1,66 +1,17 @@
-import { useNavigate } from '@tanstack/react-router';
+import { useSearch } from '@tanstack/react-router';
 
-// interface DataTablePaginationProps<T> {
-//   data: { items: T[]; total: number } | undefined;
-//   isLoading: boolean;
-// }
+import { usePagination } from '@/components/hooks';
 
-const DataTablePagination = () => {
-  // const navigate = useNavigate();
-  // const search = useSearch({ from: "/" });
+interface DataTablePaginationProps {
+  total: number;
+}
 
-  // // states
+const DataTablePagination = ({ total }: DataTablePaginationProps) => {
+  const search = useSearch({ from: '/' });
+  const { navigateToPage } = usePagination();
+  // Current page index and page size
+  const pageIndex = search.skip / search.limit;
 
-  // // Calculate pagination from search params
-  // const pageIndex = Math.floor(search.skip / search.limit);
-
-  // const pageSize = search.limit;
-
-  // states
-
-  // Navigation functions
-  // const goToPage = (newPageIndex: number) => {
-  //   const newSkip = newPageIndex * pageSize;
-  //   console.log(
-  //     "Navigating to page:",
-  //     newPageIndex,
-  //     "skip:",
-  //     newSkip,
-  //     "limit:",
-  //     pageSize
-  //   );
-  //   navigate({
-  //     to: "/",
-  //     search: {
-  //       limit: pageSize,
-  //       skip: newSkip,
-  //     },
-  //     replace: true,
-  //   });
-  // };
-
-  // const changePageSize = (newPageSize: number) => {
-  //   navigate({
-  //     to: "/",
-  //     search: {
-  //       limit: newPageSize,
-  //       skip: 0, // Reset to first page when changing page size
-  //     },
-  //     replace: true,
-  //   });
-  // };
-  const navigate = useNavigate();
-
-  const nextPageHandler = () => {
-    console.log('nextPageHandler');
-    navigate({
-      to: '/',
-      search: { limit: 30, skip: 0 },
-    });
-  };
-  const prevPageHandler = () => {
-    console.log('prevPageHandler');
-  };
   return (
     <>
       {/* Pagination Controls */}
@@ -68,18 +19,15 @@ const DataTablePagination = () => {
         <div className="flex items-center gap-2">
           <button
             className="rounded border px-3 py-1 disabled:opacity-50"
-            onClick={() => prevPageHandler()}
-            // disabled={pageIndex === 0}
+            onClick={() => navigateToPage({ pageIndex: pageIndex - 1 })}
+            disabled={pageIndex <= 0}
           >
             Previous
           </button>
           <button
             className="rounded border px-3 py-1 disabled:opacity-50"
-            onClick={() => nextPageHandler()}
-            // disabled={
-            //   pageIndex >=
-            //   (products ? Math.ceil(products.total / pageSize) - 1 : 0)
-            // }
+            onClick={() => navigateToPage({ pageIndex: pageIndex + 1 })}
+            disabled={pageIndex >= Math.ceil(total / search.limit) - 1}
           >
             Next
           </button>

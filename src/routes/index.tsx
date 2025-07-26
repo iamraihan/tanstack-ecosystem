@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-import ProductsList from '@/components/features/products';
+import { ProductList } from '@/components/features';
 
 export const Route = createFileRoute('/')({
   validateSearch: (search: Record<string, unknown>) => ({
@@ -13,7 +13,7 @@ export const Route = createFileRoute('/')({
 export function Index() {
   return (
     <div className="mx-auto max-w-5xl p-4">
-      <ProductsList />
+      <ProductList />
     </div>
   );
 }

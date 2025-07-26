@@ -1,4 +1,3 @@
-import { useNavigate } from '@tanstack/react-router';
 import { flexRender, useReactTable } from '@tanstack/react-table';
 
 import DataTablePagination from '@/components/ui/data-table/DataTablePagination';
@@ -8,17 +7,9 @@ interface AppDataTableProps<TData> {
 }
 
 const AppDataTable = <TData,>({ table }: AppDataTableProps<TData>) => {
-  const navigate = useNavigate();
-  // console.log(table, "table");
+  console.log(table.getPageCount(), 'table');
   return (
     <>
-      <button
-        className="cursor-pointer rounded-md bg-blue-500 px-4 py-2 text-white"
-        onClick={() => navigate({ to: '/' })}
-      >
-        back to home
-      </button>
-      <DataTablePagination />
       <div className="overflow-x-auto">
         <table className="min-w-full table-auto border-collapse">
           <thead>
@@ -50,6 +41,7 @@ const AppDataTable = <TData,>({ table }: AppDataTableProps<TData>) => {
           </tbody>
         </table>
       </div>
+      <DataTablePagination total={table.getPageCount() || 0} />
     </>
   );
 };

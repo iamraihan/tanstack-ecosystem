@@ -9,6 +9,7 @@ const __dirname = path.dirname(__filename);
 const WATCH_DIRECTORIES = [
   'src/components/ui',
   'src/components/features',
+  'src/components/hooks',
   'src/services',
   'src/hooks',
   'src/utils',

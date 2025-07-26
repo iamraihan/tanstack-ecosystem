@@ -18,15 +18,10 @@ const ProductsList = () => {
   // get the search params
   const search = useSearch({ from: '/' });
 
-  const { data } = useGetProducts({
+  const { data: { products, total } = {} } = useGetProducts({
     limit: Number(search.limit) || 30,
     skip: Number(search.skip) || 0,
   });
-
-  const products = data?.products || [];
-  const total = data?.total || 0;
-
-  console.log(total, 'total');
 
   const columnHelper = createColumnHelper<Product>();
 
@@ -96,7 +91,7 @@ const ProductsList = () => {
     },
     enableRowSelection: true,
     manualPagination: true,
-    // pageCount: products ? Math.ceil(products.total / pageSize) : 0,
+    pageCount: total,
   });
   return (
     <div className="mx-auto max-w-5xl p-4">
