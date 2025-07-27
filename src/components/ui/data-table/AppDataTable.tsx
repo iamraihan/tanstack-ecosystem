@@ -6,11 +6,17 @@ import DataTablePagination from '@/components/ui/data-table/DataTablePagination'
 interface AppDataTableProps<TData> {
   table: ReturnType<typeof useReactTable<TData>>;
   isLoading: boolean;
+  showPagination?: boolean;
+  pageSizeOptions?: number[];
+  showPageSizeSelector?: boolean;
 }
 
 const AppDataTable = <TData,>({
   table,
   isLoading,
+  showPagination = true,
+  pageSizeOptions = [10, 20, 30, 40, 50],
+  showPageSizeSelector = true,
 }: AppDataTableProps<TData>) => {
   const search = useSearch({ from: '/' });
   return (
@@ -73,7 +79,13 @@ const AppDataTable = <TData,>({
           </tbody>
         </table>
       </div>
-      <DataTablePagination table={table} />
+      {showPagination && (
+        <DataTablePagination
+          table={table}
+          pageSizeOptions={pageSizeOptions}
+          showPageSizeSelector={showPageSizeSelector}
+        />
+      )}
     </>
   );
 };
