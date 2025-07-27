@@ -11,7 +11,7 @@ const DataTablePagination = <TData,>({
   table,
 }: DataTablePaginationProps<TData>) => {
   const search = useSearch({ from: '/' });
-  const { navigateToPage } = usePagination();
+  const { navigateToPage, changePageSize } = usePagination();
   // Current page index and page size
   // Validate that search.skip and search.limit are numbers and limit is not zero to avoid NaN/Infinity
   const skip = Number(search.skip) || 0;
@@ -19,44 +19,47 @@ const DataTablePagination = <TData,>({
   const pageIndex = limit > 0 ? Math.floor(skip / limit) : 0;
 
   return (
-    <>
+    <div className="mt-6 border-t pt-4">
       {/* Pagination Controls */}
-      <div className="mt-4 flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        {/* Page Navigation */}
         <div className="flex items-center gap-2">
           <button
-            className="cursor-pointer rounded border px-3 py-1 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
             onClick={() => navigateToPage({ pageIndex: pageIndex - 1 })}
             disabled={pageIndex <= 0}
           >
             Previous
           </button>
           <button
-            className="cursor-pointer rounded border px-3 py-1 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
             onClick={() => navigateToPage({ pageIndex: pageIndex + 1 })}
-            disabled={
-              pageIndex + 1 >=
-              Math.ceil(table.getPageCount() / Number(search.limit))
-            }
+            disabled={pageIndex + 1 >= Math.ceil(table.getPageCount() / limit)}
           >
             Next
           </button>
         </div>
 
-        <div className="flex items-center gap-2">
-          <span className="text-sm">
-            Page {pageIndex + 1} of
-            {table.getRowCount() || 0}
-          </span>
-          <span className="text-sm text-gray-600">
-            Showing {table.getRowModel().rows.length} of{' '}
-            {table.getRowCount() || 0} results
-          </span>
+        {/* Page Information */}
+        <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-4">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium text-gray-900">
+              Page {pageIndex + 1} of {Math.ceil(table.getPageCount() / limit)}
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-gray-600">
+              Showing {table.getRowModel().rows.length} of{' '}
+              {table.getPageCount() || 0} results
+            </span>
+          </div>
         </div>
 
-        {/* <div className="flex items-center gap-2">
-          <span className="text-sm">Rows per page:</span>
+        {/* Rows per page selector (commented out for now) */}
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-600">Rows per page:</span>
           <select
-            value={pageSize}
+            value={Number(search.limit)}
             onChange={(e) => changePageSize(Number(e.target.value))}
             className="rounded border px-2 py-1"
           >
@@ -66,9 +69,9 @@ const DataTablePagination = <TData,>({
               </option>
             ))}
           </select>
-        </div> */}
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 

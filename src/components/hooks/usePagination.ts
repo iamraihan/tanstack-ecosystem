@@ -39,5 +39,15 @@ export const usePagination = () => {
     });
   };
 
-  return { navigateToPage };
+  const changePageSize = (newPageSize: number) => {
+    navigate({
+      to: '/',
+      search: {
+        limit: newPageSize,
+        skip: 0, // Reset to first page when changing page size
+      },
+    });
+  };
+
+  return { navigateToPage, changePageSize };
 };
